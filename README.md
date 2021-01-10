@@ -2,9 +2,12 @@
 
 A JavaScript based GUI webapp that makes it easy and intuitive to code melodies for Arduino buzzers.
 The live webapp is currently being hosted at [https://baut.club](https://baut.club/projects/ArduinoToneComposer.html).
-Using the webapp on that website is probably the easiest way to use it. Alternatively jump to the "Local hosting & modification" section.
 
-## Screenshot
+Using the webapp on that website is probably the easiest way to use it.
+
+Alternatively jump to the "Local hosting & modification" section.
+
+## Screenshots
 
 How the webapp looks:
 
@@ -45,16 +48,18 @@ Some random melodies made with this tool.
 
 ## Local hosting & modification
 
-You can backup this repo by cloning it. The two .html files in the repo can be used to locally host your own instance of the webapp, so you can use it offline as well. To do so, just open the .html file of your choice with the browser of your choice. Remember that the same rules apply: You need to have JavaScript enabled for it to work.
+You can backup this repo by cloning it. The two .html files in the repo can be used to locally save the webapp, so you can use it offline as well. To do so, just open the .html file of your choice with the browser of your choice. Remember that the same things apply as they do for the website version: You need to have JavaScript enabled for it to work.
+
+Due to not having the CSS rules of the main website, backgrounds will be white and the whole thing will look much worse, but functionality will be the same.
 
 There's two files in the repo:
 
 * ArduinoToneComposer_optimized.html
 
-Which is a version where the code was optimized (mostly to reduce bandwidth usage when accessing the live website online, but also to run more efficiently) by the [Closure Compiler](https://github.com/google/closure-compiler).
+Which is a version where the code was optimized (mostly to reduce bandwidth usage when accessing the live website online, but also to run more efficiently) by the [Closure Compiler](https://github.com/google/closure-compiler). If you just want to use the program, this file is the one for you.
 
 * ArduinoToneComposer_unoptimized.html
 
-Which is the same code, but not optimized. It is easier to read, has comments (albeit few) and is easier to modify.
+Which is the same code, but not optimized. It is easier to read, has comments (albeit few) and is easier to modify. If you want to change things in the programming of the webapp, this is where you do it.
 
-Note that the logic behind the webapp is not very optimized. Basically the whole canvas is redrawn every time an update on it happens instead of simply clearing and redrawing the areas with change. Given how small this webapp is this seemed more effort to implement than it would be worth.
+Note that the logic behind the webapp is not very optimized. Basically the whole canvas is redrawn every time an update on it happens instead of simply clearing and redrawing the areas where change appears. Given how small this webapp is this seemed more effort to implement than it would be worth.
