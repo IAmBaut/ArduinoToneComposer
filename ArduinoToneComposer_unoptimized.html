@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+<title>Arduino tone() composer</title>
+</head>
+<body>
+<h1>Arduino tone() composer</h1>
+    <p>This is a small javascript based webapp by <a href="https://baut.club/">Baut</a> to compose melodies with a graphical user interface.
+    You can find the repository with the code [here]. You can also download it locally as a .html file from the repo,
+    to allow for easy modification of code and to use the webapp locally/offline.
+    </p>
+    <p>It needs JavaScript to run, so while most of the site has optional JavaScript, this webapp does not.
+      If you want to use it and have JavaScript disabled with extensions or similar, please turn it on again.</p>
+    <p>The webapp might struggle/misbehave with mobile devices or any devices that have weird aspect ratios.</p>
+    <p>The webapp seems to react sluggishly/slowly for Firefox on Linux (but not on windows), it's safe to assume it will react slow on some other configurations as well. If you know of an easy way to make it run faster, feel free to contact me. Until then, I recommend Firefox on windows or ungoogled chromium on Linux.</p>
+    <hr>
+    <br>
+  <table style="width:100%">
+  <tr>
+    <td>Volume:<input type="range" min="1" max="100" value="50" id="volsliderinp" onchange="updateSettingsFromInput()"></td>
+    <td>Note duration[ms]:<input id="notedurinp" onchange="updateSettingsFromInput()" style="color: #bbbbbb; background:#222222"></td>
+    <td>Amount of notes:<input id="repsinp" onchange="updateSettingsFromInput()" style="color: #bbbbbb; background:#222222"></td>
+  </tr>
+  <tr>
+  </table>
+  <br style="line-height: 20px;">
+  <table style="width:100%">
+    <tr>
+  <td><button type="button" id="resetbt" style="color: #bbbbbb; background:#222222;">RESET</button></td>
+  <td><button type="button" id="expbt" style="color: #bbbbbb; background:#222222">ExportSong</button></td>
+  <td><button type="button" id="impbt" style="color: #bbbbbb; background:#222222">ImportSong</button></td>
+  <td><button type="button" id="expcbt" style="color: #bbbbbb; background:#222222">Export Code</button></td>
+  <td><button type="button" id="playbt" style="color: #bbbbbb; background:#222222">Play Audio</button></td>
+  <td><label><input type="checkbox" id="loopbool" style="color: #bbbbbb; background:#222222">LOOP</label></td>
+  <td><label><input type="checkbox" id="combinebool" style="color: #bbbbbb; background:#222222">Combine tones</label></td>
+  </tr>
+</table><br>
+<div class="wrapper" id="toolwrapper" style="overflow-x: auto;overflow-y: hidden;width: 100%; height:820px;">
+<canvas id="toneoverlay" width="32" height="800" style="border:1px solid #000000;position:absolute;float: left;">
+It seems like your browser does not support the HTML canvas tag. Sorry.
+</canvas>
+<canvas id="tonecompcanv" width="1600" height="800" style="border:1px solid #000000;">
+It seems like your browser does not support the HTML canvas tag. Sorry.
+</canvas>
+</div>
+
+<script>
+  var reps=80;
+  reps++;
+  var width=(reps+1)*32;
+  const height=800,
+  horizontalsegments=36;
+
+  const looping=document.getElementById("loopbool"),
+  canv=document.getElementById('tonecompcanv'),
+  canv2=document.getElementById('toneoverlay'),
+  volslid=document.getElementById("volsliderinp"),
+  repinp=document.getElementById("repsinp"),
+  durainp=document.getElementById("notedurinp"),
+  combinp=document.getElementById("combinebool"),
+  btReset=document.getElementById("resetbt"),
+  btExp=document.getElementById("expbt"),
+  btImp=document.getElementById("impbt"),
+  btExpC=document.getElementById("expcbt"),
+  btPlay=document.getElementById("playbt"),
+  leftdif=canv.offsetLeft+canv.clientLeft,
+  topdif=canv.offsetTop+canv.clientTop,
+  backgroundcolor="#222222",
+  linecolor="#bbbbbb",
+  rectcolor="#bbbbbb",
+  font = "20px Arial",
+  fontcolor=linecolor,
+  bottommargin=5,
+  frequenciesInHz=[130.81,138.59,146.83,155.56,164.81,174.61,185.00,196.00,207.65,220.00,233.08,246.94,//first octave
+  261.63,277.18,293.66,311.13,329.63,349.23,369.99,392.00,415.30,440.00,466.16,493.88,//second (middle) octave, C4-B4
+  523.25,554.37,587.33,622.25,659.25,698.46,739.99,783.99,830.61,880.00,932.33,987.77];//third octave
+
+
+  var tones=["C","C#","D","D#","E","F","F#","G","G#","A","A#","B"],
+  volume=0.5,
+  ctx=canv.getContext("2d"),
+  ctx2=canv2.getContext("2d"),
+  data=[],
+  comb=false,
+  tonelength=200;//in ms
+  combinp.checked=comb;
+  looping.checked=false;
+  durainp.value=tonelength.toString();
+  var temp = (reps-1);
+  repinp.value=temp.toString();
+  ctx.canvas.width=width;
+  updateSettingsFromInput();
+  updateCanvas();
+  drawOverlay();
+
+  function drawOverlay(){
+    const font = "20px Arial";
+    const fontcolor=linecolor;
+    var bottommargin=5;
+    var octpos=0;
+    ctx2.fillStyle=rectcolor;
+    ctx2.fillRect(0, 0, canv2.width, canv2.height);
+    ctx2.font = font;
+    ctx2.fillStyle=backgroundcolor;
+    ctx2.strokeStyle=backgroundcolor;
+    ctx2.lineWidth=2;
+
+    for (let i=0;i<=3;i++){
+      for (let j=0;j<=11;j++){
+
+        ctx2.beginPath();
+        ctx2.moveTo(0,octpos+j*height/horizontalsegments);
+        ctx2.lineTo(width,octpos+j*height/horizontalsegments);
+        ctx2.stroke();
+        ctx2.fillText(tones[11-j], 3, octpos+(j+1)*height/horizontalsegments-bottommargin);
+      }
+      octpos=height/3*i;
+    }
+    ctx2.moveTo(32,0);
+    ctx2.lineTo(32,height);
+    ctx2.stroke();
+
+
+  }
+  function drawnotes(height,width,reps,ctx,data){
+    ctx.fillStyle=rectcolor;
+    for (let i=0;i<=data.length;i++){
+      ctx.beginPath();
+      var posy = (35-(data[i]-1))*(height/horizontalsegments)
+      ctx.fillRect((i+1)*width/reps,posy,(width/reps),(height/horizontalsegments));
+      ctx.stroke();
+    }
+  }
+  function drawgrid(height,width,reps,ctx){
+    var octpos=0; //Variable to hold which position the octave starts at
+    ctx.font = font;
+    ctx.fillStyle=fontcolor;
+
+    //Draw columns
+    ctx.beginPath();
+    ctx.strokeStyle=linecolor;
+    for(let i=0;i<=reps;i++){
+      if (i==1){
+        ctx.lineWidth=4;
+        ctx.moveTo(i*(width/reps),0);
+        ctx.lineTo(i*(width/reps),height);
+        ctx.stroke();
+        ctx.lineWidth=2;
+      }
+      else{
+        ctx.moveTo(i*(width/reps),0);
+        ctx.lineTo(i*(width/reps),height);
+        ctx.stroke();
+      }
+      }
+
+    //Draw lines
+    for (let i=0;i<=3;i++){//Per octave
+      ctx.strokeStyle=linecolor;
+      for (let j=0;j<=11;j++){//Per tone in the octave
+        ctx.beginPath();
+        if (j!=0){
+          ctx.moveTo(0,octpos+j*height/horizontalsegments);
+          ctx.lineTo(width,octpos+j*height/horizontalsegments);
+          ctx.stroke();
+        }
+        ctx.closePath();
+      }
+      if (i!=3){
+        ctx.beginPath();
+        ctx.lineWidth=4;
+        ctx.moveTo(0,octpos+12*height/horizontalsegments);
+        ctx.lineTo(width,octpos+12*height/horizontalsegments);
+        ctx.stroke();
+        ctx.lineWidth=2;
+        ctx.closePath();
+        }
+      octpos=height/3*i;
+    }
+  }
+  function starttone(id){
+      if (!isNaN(id)){
+        var context = new AudioContext();
+        var osci = context.createOscillator();
+        osci.frequency.value=frequenciesInHz[id-1];
+        osci.type="square";
+        vol = context.createGain();
+        vol.gain.value=volume;
+        osci.connect(vol).connect(context.destination);
+        osci.start();
+        return osci;
+      }
+      else{
+        //A bit hacky, but this makes it not crash.
+        var context = new AudioContext();
+        var osci = context.createOscillator();
+        osci.frequency.value=0;
+        osci.start();
+        return osci;}
+    }
+
+  function play(audio){
+    var workingarray = audio.slice(0,audio.length);
+    music(cleanupArray(workingarray));
+    }
+
+  async function music(arr){
+    if (arr.length!=0){
+      var count = 1;
+      var id = arr[0];
+      if (arr.length>1){
+        if (comb||(id==0)){
+          while (arr[1]==id){
+            count++;
+            arr.shift();
+          }
+        }
+      }
+      if (arr[0]!=0){//check so its not a pause
+        var currenttone=starttone(arr[0]);
+        await new Promise(r => setTimeout(r, tonelength*count));
+        currenttone.stop();
+      }
+      else{
+        await new Promise(r => setTimeout(r, tonelength*count));
+      }
+      if ((arr.length)!=1){
+        arr.shift();
+        music(arr);
+      }
+      else{
+        if (looping.checked==true){
+          play(cleanupArray(data));
+        }
+      }
+    }
+  }
+
+  function updateData(xpos,ypos){
+    if (xpos!=0){
+      var arrpos=xpos-1;
+      var diff = (arrpos-data.length);
+      if (data.length<=arrpos){ //in case the data array is too small extend it to fit the relevant data.
+        for (let i=0;i<diff;i++){ //Add as many empty notes as needed.
+          data.push(0);
+        }
+        data.push(ypos);  //And add the relevant note after that.
+      }
+      else{ //If the clicked data field already exists in the array
+        if (data[arrpos]==ypos){ //If you click on a already defined block, it disappears
+          data[arrpos]=0;
+        }
+        else{
+          data[arrpos]=ypos;  //else it is inserted.
+        }
+      }
+    updateCanvas();
+    }
+  }
+
+  canv.addEventListener('click', function(event) {
+    const toolwrappervar = document.getElementById("toolwrapper");
+    var x = event.pageX-leftdif+1+toolwrappervar.scrollLeft,
+    y=event.pageY-topdif+1+toolwrappervar.scrollTop,
+    cellwidthx=width/(reps+1),
+    cellwidthy=height/horizontalsegments,
+    cellx=Math.floor(x/cellwidthx),
+    celly=36-Math.floor(y/cellwidthy);
+    updateData(cellx,celly);
+  });
+
+  combinp.addEventListener("click",function(event){
+    comb=combinp.checked;
+  });
+
+  btReset.addEventListener("click",function(event){
+    reset();
+  });
+  btExp.addEventListener("click",function(event){
+    exportSong();
+  });
+  btImp.addEventListener("click",function(event){
+    importSong();
+  });
+  btExpC.addEventListener("click",function(event){
+    exportCode();
+  });
+  btPlay.addEventListener("click",function(event){
+    play(data);
+  });
+
+  volsliderinp.addEventListener("click",function(event){
+    updateSettingsFromInput();
+  });
+  notedurinp.addEventListener("click",function(event){
+    updateSettingsFromInput();
+  });
+  repsinp.addEventListener("click",function(event){
+    updateSettingsFromInput()
+  });
+  function reset(){
+    data=[];
+    updateCanvas();
+  }
+
+  function exportCode(){
+    var returnstring="void playTune(){\n  int buzzerpin=0;\n"
+    returnstring+=makeCode(data.slice(),"");
+    returnstring+="}"
+    alert(returnstring);
+  }
+
+  function makeCode(dataarray,codestring){
+    while(dataarray.length!=0){
+      var count=1;
+      var id = dataarray[0];
+      var time = 0;
+      if (dataarray.length>1){
+        if (comb||(id==0)){
+          while (dataarray[1]==id){
+            count++;
+            dataarray.shift();
+          }
+        }
+      }
+      var time = (count*tonelength);
+      if (id==0){
+        codestring+="  delay("+time.toString()+");\n";
+        dataarray.shift();
+      }
+      else{
+        var freq = Math.round(frequenciesInHz[id]);
+        codestring+="  tone(buzzerpin,"+freq.toString()+","+time.toString()+");\n";
+        dataarray.shift();
+      }
+    }
+    return codestring;
+  }
+  function updateCanvas(){
+    canv.width=(reps+1)*32;
+    width=(reps+1)*32;
+    ctx.clearRect(0, 0, canv.width, canv.height);
+    ctx.fillStyle=backgroundcolor;
+    ctx.fillRect(0, 0, canv.width, canv.height);
+    drawnotes(height,canv.width,reps+1,ctx,data);
+    drawgrid(height,canv.width,reps+1,ctx);
+  }
+
+  function cleanupArray(uglyarray){
+    var controllvar = true;
+    while (uglyarray[(uglyarray.length-1)]==0){
+      uglyarray.pop();
+    }
+    return uglyarray;
+  }
+
+  function exportSong(){
+    /*
+    Export string is surrounded by "-". Entries are separated by ",".
+    At first the global vars are added, then a "+" appears, then the notes.
+    General form (every variable name in brackets.):
+    -(reps),(tonelength)+(data)-
+    */
+    var newar = cleanupArray(data);
+    if (looping.checked){var loopingbool = 1;}
+    else {var loopingbool = 0;}
+    if (combinp.checked){var combining = 1;}
+    else {var combining = 0;}
+    var expreps = 0;
+    if (data.length<reps){
+      expreps=data.length;
+    }
+    var expstr = "-"+(expreps.toString())+","+(tonelength.toString())+","+(loopingbool.toString())+","+(combining.toString())+"+"+newar.toString()+"-";
+    expstr=expstr.replace(",NaN","");
+    prompt("Copy the following string for saving/sharing:",expstr); //Prompt is much nicer to copy the defaultstring than alert.
+  }
+
+  function updateSettingsFromInput(){
+    volume=Number(volslid.value)/100;
+    if (!isNaN(repinp.value)&&(!isNaN(parseFloat(repinp.value)))){
+      reps=parseInt(repinp.value);
+      updateCanvas();
+    }
+    if (!isNaN(durainp.value)&&(!isNaN(parseFloat(durainp.value)))){
+      tonelength=parseInt(durainp.value);
+    }
+  }
+
+  function importSong(){
+    var userinput = prompt("Please enter your exported data:", "");
+    if (userinput==""){
+      reset();
+    }
+    else{
+      if (!(userinput==null)){
+        //Make sure it has the required form.
+        if(userinput[0]=="-"&&userinput[userinput.length-1]=="-"){
+          //Insert the saved data.
+          userinput=userinput.substr(1,userinput.length-2);
+          var settings = userinput.split("+")[0].split(",");
+          var notes = userinput.split("+")[1].split(",");
+          if (notes.length>settings[1]){
+            alert("The data is not formatted correctly. Sorry.");
+          }
+          else{
+            if (settings[2]=="1"){
+              looping.checked=true;
+            }
+            else if (settings[2]=="0"){
+              looping.checked=false;
+            }
+            if (settings[3]=="1"){
+              combinp.checked=true;
+              comb=true;
+            }
+            else if (settings[3]=="0"){
+              combinp.checked=false;
+              comb=false;
+            }
+            reps = Number(settings[0]);
+            tonelength=Number(settings[1]);
+            var arrlength = notes.length;
+            for (let i=0;i<=arrlength;i++){
+              notes[i]=Number(notes[i]);
+              if ((notes[i]>36)||(notes[i]<0)){
+                alert("The data is not formatted correctly. Sorry.");
+              }
+            }
+            data = notes;
+            updateCanvas();
+          }
+        }
+      }
+    }
+  }
+</script>
+</body>
+</html>

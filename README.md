@@ -1,18 +1,23 @@
 # ArduinoToneComposer
 
-A JavaScript based GUI webapp that makes it easy and intuitive to code melodies for Arduino buzzers. 
+A JavaScript based GUI webapp that makes it easy and intuitive to code melodies for Arduino buzzers.
 The live webapp is currently being hosted at [link]().
 
 ## Screenshot
 
 How the webapp looks:
 
-![link]()
+![ArduinoToneComposer webapp UI example](https://gitlab.com/Baut/readme-images/-/raw/master/ArduinoToneComposer/ArduinoToneComposerUIexample.png)
+
+![ArduinoToneComposer webapp UI example2](https://gitlab.com/Baut/readme-images/-/raw/master/ArduinoToneComposer/ArduinoToneComposerWebsiteExample.png)
+
+![ArduinoToneComposer webapp export example](https://gitlab.com/Baut/readme-images/-/raw/master/ArduinoToneComposer/ArduinoToneComposerExportCodeExample.png)
+
 
 ## Functionality
 
-* Left click on the canvas to add a note. Left click on a note to delete it.
-* There can only be one note per column. If there is a conflict, the old note is replaced with the new note.
+* **Left click** on the canvas to add a note. Left click on a note to delete it.
+* There can only be **one note per column**. If there is a conflict, the old note is replaced with the new note.
 * Volume slider: Adjust to change the volume of the melody.
 * Note duration [ms]: How long each unit (represented by a column in the grid) is. Unit is milliseconds, expects whole numbers.
 * Amount of notes: Length of your canvas/Amount of columns. You can turn this up a lot, as both the export buttons will cut empty time after the melody anyways.
