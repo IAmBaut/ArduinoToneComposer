@@ -1,7 +1,8 @@
 # ArduinoToneComposer
 
 A JavaScript based GUI webapp that makes it easy and intuitive to code melodies for Arduino buzzers.
-The live webapp is currently being hosted at [link]().
+The live webapp is currently being hosted at [https://baut.club](https://baut.club/projects/ArduinoToneComposer.html).
+Using the webapp on that website is probably the easiest way to use it. Alternatively jump to the "Local hosting & modification" section.
 
 ## Screenshot
 
@@ -41,3 +42,19 @@ Some random melodies made with this tool.
 | Sweet Child o' Mine (intro) | -64,200,1,1+15,27,22,20,32,22,31,22,15,27,22,20,32,22,31,22,17,27,22,20,32,22,31,22,17,27,22,20,32,22,31,22,20,27,22,20,32,22,31,22,20,27,22,20,32,22,31,22,15,27,22,20,32,22,31,22,15,27,22,20,32,22,31,22- |
 | Ode to Joy | -15,200,0,0+17,17,18,20,20,18,17,15,13,13,15,17,17,15,15- |
 | Smoke on the water (barely)  | -17,300,1,1+15,18,20,20,15,18,21,20,20,15,18,20,20,18,18,15,15- |
+
+## Local hosting & modification
+
+You can backup this repo by cloning it. The two .html files in the repo can be used to locally host your own instance of the webapp, so you can use it offline as well. To do so, just open the .html file of your choice with the browser of your choice. Remember that the same rules apply: You need to have JavaScript enabled for it to work.
+
+There's two files in the repo:
+
+* ArduinoToneComposer_optimized.html
+
+Which is a version where the code was optimized (mostly to reduce bandwidth usage when accessing the live website online, but also to run more efficiently) by the [Closure Compiler](https://github.com/google/closure-compiler).
+
+* ArduinoToneComposer_unoptimized.html
+
+Which is the same code, but not optimized. It is easier to read, has comments (albeit few) and is easier to modify.
+
+Note that the logic behind the webapp is not very optimized. Basically the whole canvas is redrawn every time an update on it happens instead of simply clearing and redrawing the areas with change. Given how small this webapp is this seemed more effort to implement than it would be worth.
