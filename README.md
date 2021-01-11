@@ -62,4 +62,6 @@ Which is a version where the code was optimized (mostly to reduce bandwidth usag
 
 Which is the same code, but not optimized. It is easier to read, has comments (albeit few) and is easier to modify. If you want to change things in the programming of the webapp, this is where you do it.
 
-Note that the logic behind the webapp is not very optimized. Basically the whole canvas is redrawn every time an update on it happens instead of simply clearing and redrawing the areas where change appears. Given how small this webapp is this seemed more effort to implement than it would be worth.
+The code for this webapp was partially changed to optimize it, but both the audio and the drawing of the canvas (grid and notes) are done on the same thread, so (especially on slower machines) audio might lag/glitch a little when the code has to handle many inputs in quick succession.
+
+I considered multithreading the audio with a webworker, but webworkers don't support audio. This could possibly be handled with either an audio worklet or by using a webworker to generate the canvas image data on a seperate thread, but with the optimization and improvements of the code this doesn't seem necessary for now.
