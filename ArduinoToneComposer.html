@@ -1,0 +1,50 @@
+<!DOCTYPE>
+<html>
+<head>
+  <meta charset="utf-8">
+</head>
+<body>
+  <h1>Arduino tone() composer</h1>
+  <p>This is a small javascript based webapp by <a href="https://baut.club/">Baut</a> to compose melodies with a graphical user interface.
+    You can find the repository with the code <a href="https://gitlab.com/Baut/arduinotonecomposer">here</a>. You can also download it locally as a .html file from the repo,
+    to allow for easy modification of code and to use the webapp locally/offline.
+  </p>
+  <p>It needs JavaScript to run, so while most of the site has optional JavaScript, this webapp does not.
+    If you want to use it and have JavaScript disabled with extensions or similar, please turn it on again.</p>
+    <p>The webapp might struggle/misbehave with mobile devices or any devices that have weird aspect ratios.</p>
+    <hr>
+    <br>
+    <table style="width:100%">
+      <tr>
+        <td>Volume:<input type="range" min="1" max="100" value="50" id="volsliderinp"></td>
+        <td>Note duration[ms]:<input id="notedurinp" style="color: #bbbbbb; background:#222222"></td>
+        <td>Amount of notes:<input id="repsinp" style="color: #bbbbbb; background:#222222"></td>
+      </tr>
+      <tr>
+      </table>
+      <br style="line-height: 20px;">
+      <table style="width:100%">
+        <tr>
+          <td><button type="button" id="resetbt" style="color: #bbbbbb; background:#222222;">RESET</button></td>
+          <td><button type="button" id="expbt" style="color: #bbbbbb; background:#222222">ExportSong</button></td>
+          <td><button type="button" id="impbt" style="color: #bbbbbb; background:#222222">ImportSong</button></td>
+          <td><button type="button" id="expcbt" style="color: #bbbbbb; background:#222222">Export Code</button></td>
+          <td><button type="button" id="playbt" style="color: #bbbbbb; background:#222222">Play Audio</button></td>
+          <td><label><input type="checkbox" id="loopbool" style="color: #bbbbbb; background:#222222">LOOP</label></td>
+          <td><label><input type="checkbox" id="combinebool" style="color: #bbbbbb; background:#222222">Combine tones</label></td>
+        </tr>
+      </table><br>
+      <canvas id="toneoverlay" width="32" height="800" style="border:1px solid #000000;position:absolute;float: left;z-index:4;">
+        It seems like your browser does not support the HTML canvas tag. Sorry.
+      </canvas>
+      <div class="wrapper" id="toolwrapper" style="overflow-x: auto;overflow-y: hidden; position: relative; width: 100%; height:820px;">
+        <canvas id="gridcanv" width="1600" height="800" style="border:1px solid #000000;position: absolute; top: 0px; left: 0px;z-index:2;">
+          It seems like your browser does not support the HTML canvas tag. Sorry.
+        </canvas>
+        <canvas id="tonecompcanv" width="1600" height="800" style="border:1px solid #000000;position: absolute; top: 0px; left: 0px;z-index:3;">
+          It seems like your browser does not support the HTML canvas tag. Sorry.
+        </canvas>
+      </div>
+      <script src="ArduinoToneComposer_optimized.js"></script>
+    </body>
+    </html>

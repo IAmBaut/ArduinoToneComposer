@@ -48,19 +48,23 @@ Some random melodies made with this tool.
 
 ## Local hosting & modification
 
-You can backup this repo by cloning it. The two .html files in the repo can be used to locally save the webapp, so you can use it offline as well. To do so, just open the .html file of your choice with the browser of your choice. Remember that the same things apply as they do for the website version: You need to have JavaScript enabled for it to work.
+You can backup this repo by cloning it. To use the webapp offline, open the .html file with your browser of choice. By default it loads the optimized version of the code. Remember that the same things apply as they do for the website version: You need to have JavaScript enabled for it to work.
 
 Due to not having the CSS rules of the main website, backgrounds will be white and the whole thing will look much worse, but functionality will be the same.
 
-There's two files in the repo:
+There's three files in the repo:
 
-* ArduinoToneComposer_optimized.html
+* ArduinoToneComposer.html
 
-Which is a version where the code was optimized (mostly to reduce bandwidth usage when accessing the live website online, but also to run more efficiently) by the [Closure Compiler](https://github.com/google/closure-compiler). If you just want to use the program, this file is the one for you.
+This is the .html part of the webapp. It's also what you open to use it. ***Note: Some browsers do not allow loading of external scripts with locally hosted files. An easy way to circumvent this is either host the folder as a webserver (`python -m http.server` comes to mind) or by pasting the text from a .js file inbetween <code></code> tags into the html file.)*** The .html file loads the ArduinoToneComposer_optimized.js file by default.
 
-* ArduinoToneComposer_unoptimized.html
+* ArduinoToneComposer_optimized.js
 
-Which is the same code, but not optimized. It is easier to read, has comments (albeit few) and is easier to modify. If you want to change things in the programming of the webapp, this is where you do it.
+This is a version where the code was optimized (mostly to reduce bandwidth usage when accessing the live website online, but also to run more efficiently) by the [Closure Compiler](https://github.com/google/closure-compiler). If you just want to use the program, this file is the one for you.
+
+* ArduinoToneComposer_unoptimized.js
+
+Basically the same code, but not optimized. It is easier to read, has comments (albeit few) and is easier to modify. If you want to change things in the programming of the webapp, this is where you do it.
 
 The code for this webapp was partially changed to optimize it, but both the audio and the drawing of the canvas (grid and notes) are done on the same thread, so (especially on slower machines) audio might lag/glitch a little when the code has to handle many inputs in quick succession.
 
