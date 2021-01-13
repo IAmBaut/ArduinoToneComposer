@@ -52,11 +52,15 @@ You can backup this repo by cloning it. To use the webapp offline, open the .htm
 
 Due to not having the CSS rules of the main website, backgrounds will be white and the whole thing will look much worse, but functionality will be the same.
 
-There's three files in the repo:
+There's four files in the repo:
 
 * ArduinoToneComposer.html
 
-This is the .html part of the webapp. It's also what you open to use it. ***Note: Some browsers do not allow loading of external scripts with locally hosted files. An easy way to circumvent this is either host the folder as a webserver (`python -m http.server` comes to mind) or by pasting the text from a .js file inbetween <code></code> tags into the html file.)*** The .html file loads the ArduinoToneComposer_optimized.js file by default.
+This is the .html part of the webapp. It's also what you open to use it. It loads the ArduinoToneComposer_optimized.js file by default.
+
+* ArduinoToneComposer_NoHostVersion.html
+
+***Some browsers do not allow loading of external scripts for locally hosted files. An easy way to circumvent this is to host the folder as a (local) webserver (for example with `python -m http.server`). The NoHostVersion is an alternative that doesn't need this. It's a single file with the content from both ArduinoToneComposer.html and ArduinoToneComposer_optimized.js. To use it, just open it with your browser of choice.***
 
 * ArduinoToneComposer_optimized.js
 
