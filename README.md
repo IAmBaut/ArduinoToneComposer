@@ -1,7 +1,7 @@
 # ArduinoToneComposer
 
 A JavaScript based GUI webapp that makes it easy and intuitive to code melodies for Arduino buzzers.
-The live webapp is currently being hosted at [https://baut.club](https://baut.club/projects/ArduinoToneComposer.html).
+The live webapp is currently being hosted at [https://baut.club](https://baut.club/software/arduinotonecomposer).
 
 Using the webapp on that website is probably the easiest way to use it.
 
