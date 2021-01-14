@@ -225,14 +225,14 @@ function drawNote(xpos,ypos){
 ctx.beginPath();
 var posy = (35-ypos)*(height/horizontalsegments);
 //Without rounding the values, there will be artefacts when drawing and deleting something left over.
-ctx.fillRect(Math.round((xpos+1)*width/(reps+1)),Math.round(posy),Math.round((width/reps)),Math.round((height/horizontalsegments)));
+ctx.fillRect(Math.round((xpos+1)*width/(reps+1)),Math.round(posy),Math.round((width/(reps+1))),Math.round((height/horizontalsegments)));
 ctx.stroke();
 }
 //Delete note
 function deleteNote(xpos,ypos){
 var posy = (35-ypos)*(height/horizontalsegments);
 //Without rounding the values, there will be artefacts when drawing and deleting something left over.
-ctx.clearRect(Math.round((xpos+1)*width/(reps+1)),Math.round(posy),Math.round((width/reps)),Math.round((height/horizontalsegments)));
+ctx.clearRect(Math.round((xpos+1)*width/(reps+1)),Math.round(posy),Math.round((width/(reps+1))),Math.round((height/horizontalsegments)));
 }
 //Set data to [] and redraw grid.
 function reset(){
@@ -242,12 +242,18 @@ function reset(){
 //Create Code string and put makeCode in it.
 function exportCode(){
   var returnstring="void playTune(){\n  int buzzerpin=0;\n"
-  returnstring+=makeCode(data.slice(),"");
-  returnstring+="}"
+  returnstring+=makeMelodyVar(data.slice());
+  if (looping.checked){
+    returnstring+="\n}"
+  }
+  returnstring+="\n}"
   alert(returnstring);
 }
-//Make code from dataarray.ä
-function makeCode(dataarray,codestring){
+//Make code from dataarray.
+function makeMelodyVar(dataarray){
+  var melodystr = "";
+  var returnstr = "  int melody [";
+  var entries = 0;
   while(dataarray.length!=0){
     var count=1;
     var id = dataarray[0];
@@ -261,17 +267,26 @@ function makeCode(dataarray,codestring){
       }
     }
     var time = (count*tonelength);
-    if (id==0){
-      codestring+="  delay("+time.toString()+");\n";
-      dataarray.shift();
+    entries++;
+    if (!isNaN(id)){
+      if (id==0){
+        melodystr+="{"+id.toString()+","+time.toString()+"},";
+      }
+      else{
+        var freq = Math.round(frequenciesInHz[id]);
+        melodystr+="{"+freq.toString()+","+time.toString()+"},";
+      }
     }
-    else{
-      var freq = Math.round(frequenciesInHz[id]);
-      codestring+="  tone(buzzerpin,"+freq.toString()+","+time.toString()+");\n";
-      dataarray.shift();
-    }
+    dataarray.shift();
   }
-  return codestring;
+  returnstr+=entries.toString()+"][2] = {"+melodystr;
+  returnstr=returnstr.slice(0,returnstr.length-1);
+  returnstr+="};\n";
+  if (looping.checked){
+    returnstr+="  while (true){\n"
+  }
+  returnstr+="  for (int i=0;i<"+entries.toString()+";i++){\n    if (melody[i][0]==0){\n      if (i!=0){\n        noTone(buzzerpin);\n      }\n      delay(melody[i][1]);\n    }\n    else{\n      tone(buzzerpin,melody[i][0]);\n      delay(melody[i][1]);\n    }\n  }\n  noTone(buzzerpin);"
+  return returnstr;
 }
 //Clear and redraw canvas.
 function redrawAllNotes(){
