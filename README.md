@@ -21,7 +21,7 @@ How the webapp looks:
 ## Functionality
 
 * **Left click** on the canvas to add a note. Left click on a note to delete it.
-* There can only be **one note per column**. If there is a conflict, the old note is replaced with the new note.
+* There can only be **one note per column**. This is due to limitations of the `tone()` method and the hardware. If there is a conflict, the old note is replaced with the new note.
 * Volume slider: Adjust to change the volume of the melody.
 * Note duration [ms]: How long each unit (represented by a column in the grid) is. Unit is milliseconds, expects whole numbers.
 * Amount of notes: Length of your canvas/Amount of columns. You can turn this up a lot, as both the export buttons will cut empty time after the melody anyways.
@@ -31,7 +31,7 @@ How the webapp looks:
 * ExportCode: Shows a popup with Arduino code that will play your melody. Just copy paste it to your Arduino IDE.
 * Play Audio: Play the melody.
 * Loop: If you check this the melody loops (repeats) when reaching the end.
-* Combine tones: When not checked, every tone is played individually. When not, multiple same notes after another will be played as one (longer) note.
+* Combine tones: When not checked, every tone is played individually. Otherwise, multiple same notes after another will be played as one (longer) note.
 
 
 ## Example melodies
