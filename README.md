@@ -50,7 +50,7 @@ Some random melodies made with this tool.
 
 You can backup this repo by cloning it. To use the webapp offline, open the .html file with your browser of choice. By default it loads the optimized version of the code. Remember that the same things apply as they do for the website version: You need to have JavaScript enabled for it to work.
 
-Due to not having the CSS rules of the main website, backgrounds will be white and the whole thing will look much worse, but functionality will be the same.
+Due to not having the CSS of the main website, backgrounds will be white and the whole thing will look much worse, but functionality will be the same.
 
 There's four files in the repo:
 
