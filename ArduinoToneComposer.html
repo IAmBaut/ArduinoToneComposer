@@ -3,14 +3,34 @@
 <head>
   <meta charset="utf-8">
   <style>
+    :root{
+        --bg-color:#222;
+        --draw-color:#bbb;
+    }
   body{
-      background-color:#222;
-      color:#bbb;
+      background-color:var(--bg-color);
+      color:var(--draw-color);
       font-size: 20;
   }
   a{
-      color:#bbb;
+      color:var(--draw-color);
   }
+  button {
+      font-size: 16px;
+      margin: 5px;
+      cursor: pointer;
+      background-color:var(--draw-color);
+      color: var(--bg-color);
+      padding: 10px 20px;
+  }
+table,td,th{
+      text-align: center;
+}
+input{
+  padding: 5px 10px;
+  border: 2px solid var(--draw-color);
+  border-radius: 10px;
+}
   </style>
 </head>
 <body>
@@ -25,20 +45,20 @@
     <br>
     <table style="width:100%">
       <tr>
-        <td>Volume:<input type="range" min="1" max="100" value="50" id="volsliderinp"></td>
-        <td>Note duration[ms]:<input id="notedurinp" style="color: #bbbbbb; background:#222222"></td>
-        <td>Amount of notes:<input id="repsinp" style="color: #bbbbbb; background:#222222"></td>
+        <td>Volume:&emsp;<input type="range" min="1" max="100" value="50" id="volsliderinp"></td>
+        <td>Note duration[ms]:&emsp;<input id="notedurinp" style="color: #bbbbbb; background:#222222"></td>
+        <td>Amount of notes:&emsp;<input id="repsinp" style="color: #bbbbbb; background:#222222"></td>
       </tr>
       <tr>
       </table>
       <br style="line-height: 20px;">
       <table style="width:100%">
         <tr>
-          <td><button type="button" id="resetbt" style="color: #bbbbbb; background:#222222;">RESET</button></td>
-          <td><button type="button" id="expbt" style="color: #bbbbbb; background:#222222">ExportSong</button></td>
-          <td><button type="button" id="impbt" style="color: #bbbbbb; background:#222222">ImportSong</button></td>
-          <td><button type="button" id="expcbt" style="color: #bbbbbb; background:#222222">Export Code</button></td>
-          <td><button type="button" id="playbt" style="color: #bbbbbb; background:#222222">Play Audio</button></td>
+          <td><button type="button" id="resetbt">RESET</button></td>
+          <td><button type="button" id="expbt">ExportSong</button></td>
+          <td><button type="button" id="impbt">ImportSong</button></td>
+          <td><button type="button" id="expcbt">Export Code</button></td>
+          <td><button type="button" id="playbt">Play Audio</button></td>
           <td><label><input type="checkbox" id="loopbool" style="color: #bbbbbb; background:#222222">LOOP</label></td>
           <td><label><input type="checkbox" id="combinebool" style="color: #bbbbbb; background:#222222">Combine tones</label></td>
         </tr>
