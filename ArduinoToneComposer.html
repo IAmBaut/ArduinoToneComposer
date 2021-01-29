@@ -4,96 +4,129 @@
   <meta charset="utf-8">
   <style>
     :root{
-        --bg-color:#222;
-        --draw-color:#bbb;
+          --bg-color:#222;
+          --draw-color:#bbb;
+      }
+    body{
+        background-color:var(--bg-color);
+        color:var(--draw-color);
+        font-size: 20;
     }
-  body{
-      background-color:var(--bg-color);
-      color:var(--draw-color);
-      font-size: 20;
+    a{
+        color:var(--draw-color);
+    }
+    button {
+        font-size: 15px;
+        margin: 5px;
+        cursor: pointer;
+        background-color:var(--draw-color);
+        color: var(--bg-color);
+        padding: 10px 20px;
+    }
+    table,td,th{
+        font-size:20;
   }
-  a{
-      color:var(--draw-color);
+  input{
+    padding: 5px 10px;
+    border: 2px solid var(--draw-color);
+    border-radius: 10px;
+    background-color: var(--bg-color);
+    color: var(--draw-color);
   }
-  button {
-      font-size: 15px;
-      margin: 5px;
+  input:focus{
+    background-color: var(--draw-color);
+    color:var(--bg-color);
+  }
+  
+  .checkboxcontainer {
+      display: block;
+      position: relative;
+      padding-left: 40px;
+      padding-bottom: 10px;
       cursor: pointer;
-      background-color:var(--draw-color);
-      color: var(--bg-color);
-      padding: 10px 20px;
+      font-size: 20px;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
+  
+    .checkboxcontainer input {
+      position: absolute;
+      opacity: 0;
+      height: 0;
+      width: 0;
+    }
+    
+    .checkmark {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 30px;
+      width: 30px;
+      background-color: var(--draw-color);
+    }
+    
+    .checkboxcontainer:hover input ~ .checkmark {
+      background-color: var(--draw-color);
+    }
+    
+    .checkboxcontainer input:checked ~ .checkmark {
+      background-color: var(--draw-color);
+    }
+    
+    .checkmark:after {
+      content: "";
+      position: absolute;
+      display: none;
+    }
+  
+    .checkboxcontainer input:checked ~ .checkmark:after {
+      display: block;
+    }
+    
+    .checkboxcontainer .checkmark:after {
+      left: 11px;
+      top: 7px;
+      width: 5px;
+      height: 10px;
+      border: solid #000000;
+      border-width: 0 3px 3px 0;
+      -webkit-transform: rotate(45deg);
+      -ms-transform: rotate(45deg);
+      transform: rotate(45deg);
+    }
+    .checkboxtextcenter{
+    position:relative;
+    top:3px;
   }
-  table,td,th{
-      font-size:20;
-}
-input{
-  padding: 5px 10px;
-  border: 2px solid var(--draw-color);
-  border-radius: 10px;
-}
-
-.checkboxcontainer {
-    display: block;
-    position: relative;
-    padding-left: 40px;
-    padding-bottom: 10px;
+  .slideinp {
+    -webkit-appearance: none;
+    width: 75%;
+    height: 1px;
+    background: #bbbbbb;
+    opacity: 0.75;
+    -webkit-transition: .4s;
+    transition: opacity .4s;
+  }
+  .slideinp:hover {
+    opacity: 1;
+  }
+  .slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background: #222222;
     cursor: pointer;
-    font-size: 20px;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-  }
-
-  .checkboxcontainer input {
-    position: absolute;
-    opacity: 0;
-    height: 0;
-    width: 0;
   }
   
-  .checkmark {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 30px;
-    width: 30px;
-    background-color: var(--draw-color);
+  .slideinp::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    background: #222222;
+    cursor: pointer;
   }
-  
-  .checkboxcontainer:hover input ~ .checkmark {
-    background-color: var(--draw-color);
-  }
-  
-  .checkboxcontainer input:checked ~ .checkmark {
-    background-color: var(--draw-color);
-  }
-  
-  .checkmark:after {
-    content: "";
-    position: absolute;
-    display: none;
-  }
-
-  .checkboxcontainer input:checked ~ .checkmark:after {
-    display: block;
-  }
-  
-  .checkboxcontainer .checkmark:after {
-    left: 11px;
-    top: 7px;
-    width: 5px;
-    height: 10px;
-    border: solid #000000;
-    border-width: 0 3px 3px 0;
-    -webkit-transform: rotate(45deg);
-    -ms-transform: rotate(45deg);
-    transform: rotate(45deg);
-  }
-  .checkboxtextcenter{
-  position:relative;
-  top:3px;
-}
   </style>
 </head>
 <body>
@@ -108,9 +141,9 @@ input{
     <br>
     <table style="width:100%">
       <tr>
-        <td>Volume:&emsp;<input type="range" min="1" max="100" value="50" id="volsliderinp"></td>
-        <td>Note duration[ms]:&emsp;<input id="notedurinp" style="color: #bbbbbb; background:#222222"></td>
-        <td>Amount of notes:&emsp;<input id="repsinp" style="color: #bbbbbb; background:#222222"></td>
+        <td>Volume:&emsp;<input type="range" class="slideinp" min="1" max="100" value="50" id="volsliderinp"></td>
+        <td>Note duration[ms]:&emsp;<input id="notedurinp" ></td>
+        <td>Amount of notes:&emsp;<input id="repsinp" ></td>
       </tr>
       <tr>
       </table>
@@ -122,8 +155,8 @@ input{
           <td><button type="button" id="impbt">ImportSong</button></td>
           <td><button type="button" id="expcbt">Export Code</button></td>
           <td><button type="button" id="playbt">Play Audio</button></td>
-          <td><label class="checkboxcontainer">LOOP<input type="checkbox" id="loopbool" style="color: #bbbbbb; background:#222222"><span class="checkmark"></span></label></td>
-          <td><label class="checkboxcontainer">Combine tones<input type="checkbox" id="combinebool" style="color: #bbbbbb; background:#222222"><span class="checkmark"></span></label></td>
+          <td><label class="checkboxcontainer"><div class="checkboxtextcenter">LOOP</div><input type="checkbox" id="loopbool" ><span class="checkmark"></span></label></td>
+          <td><label class="checkboxcontainer"><div class="checkboxtextcenter">Combine tones</div><input type="checkbox" id="combinebool"><span class="checkmark"></span></label></td>
         </tr>
       </table><br>
       <canvas id="toneoverlay" width="32" height="800" style="border:1px solid #000000;position:absolute;float: left;z-index:4;">
